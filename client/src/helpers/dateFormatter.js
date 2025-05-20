@@ -20,3 +20,12 @@ export const auctionDateTag = (date) => {
   else if (timeDiff > 0)
     return { tag: "Ended", color: "from-red-400 to-red-500" };
 };
+
+export const isAuctionStart = (time) => {
+  const timeDiff = Date.now() - new Date(time).getTime();
+  const hours = timeDiff / (1000 * 60 * 60);
+  if (hours >= 0 && hours < 1) {
+    return true;
+  }
+  return false;
+};

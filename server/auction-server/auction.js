@@ -21,7 +21,11 @@ io.on("connection", (socket) => {
   console.log("user connected !!!", socket.id);
   socket.on("join-room", async ({ roomId, user }) => {
     socket.username = user;
+    socket.roomId = roomId;
+    console.log("socket room", socket.roomId);
     socket.join(roomId);
+    let clientSet = await io.in(roomId).fetchSockets();
+    io.to(roomId).emit("online_users", { userCount: clientSet.length });
     let isRoomPresent = await redisClient.get(`roomId=${roomId}`);
     if (isRoomPresent) {
       socket.emit("prod_ini_price", {
@@ -50,6 +54,15 @@ io.on("connection", (socket) => {
         io.to(roomId).emit("update_price", { newPrice });
       }
     }
+  });
+
+  socket.on("disconnecting", async () => {
+    let roomId = socket.roomId;
+    socket.leave(roomId);
+    let clientCount = await io.in(roomId).fetchSockets();
+    io.to(roomId).emit("online_users", {
+      userCount: clientCount.length,
+    });
   });
 
   socket.on("disconnect", () => {

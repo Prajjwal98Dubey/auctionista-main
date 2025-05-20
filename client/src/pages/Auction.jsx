@@ -18,6 +18,7 @@ const Auction = () => {
   const [inpText, setInpText] = useState(0);
   const [count, setCount] = useState(3);
   const [showTimer, setShowTimer] = useState(false);
+  const [onlineUser, setOnlineUser] = useState(1);
   const intervalRef = useRef(null);
   useEffect(() => {
     if (
@@ -35,6 +36,9 @@ const Auction = () => {
       });
       socketRef.current.on("update_price", ({ newPrice }) => {
         setBidPrice(parseInt(newPrice));
+      });
+      socketRef.current.on("online_users", ({ userCount }) => {
+        setOnlineUser(userCount);
       });
     }
   }, [socketRef, location, userDetails, prodDetails]);
@@ -100,6 +104,14 @@ const Auction = () => {
                   </div>
                   <div className="flex items-center justify-center text-4xl font-extrabold text-red-600">
                     ₹{bidPrice.toLocaleString()}
+                  </div>
+                </div>
+                <div className="flex justify-center items-center py-2">
+                  <div className="text-[12px] text-gray-600 font-medium px-1">
+                    Users Online:
+                  </div>
+                  <div className="flex items-center justify-center text-4xl font-extrabold text-red-600">
+                    {onlineUser}
                   </div>
                 </div>
               </div>

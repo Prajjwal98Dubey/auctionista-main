@@ -16,7 +16,7 @@ const BidTimer = ({ count, setCount, showTimer, setShowTimer }) => {
       setShowTimer(false);
       setCount(3);
     }
-  }, [count, setShowTimer, setCount]);
+}, [count, setShowTimer, setCount]);
   return (
     <>
       <div className="py-2 flex justify-center items-center">
