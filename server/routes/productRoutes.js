@@ -18,6 +18,7 @@ import {
   getProductDetails,
   getRelatedProducts,
   singleProductDetails,
+  updateFinalProductDetails,
   updateHighestBidOfProduct,
   updateHighestBidOfSpecificProduct,
 } from "../controllers/productController.js";
@@ -52,4 +53,5 @@ productRouter
   .post(authMiddleWare, fetchAllWatchListProductDetails);
 
 productRouter.route("/related_products").get(getRelatedProducts);
+productRouter.route("/final_product_details").post(updateFinalProductDetails);
 export default productRouter;

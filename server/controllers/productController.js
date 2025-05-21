@@ -1,7 +1,7 @@
 import { nanoid } from "nanoid";
 import auctionPool from "../db/connectDB.js";
 import { categoryToDBCategory } from "../helpers/mapping.js";
-import { connectRedisServer } from "../redisClient.js";
+import { connectRedisServer, redisClient } from "../redisClient.js";
 import { convertDateToUsageTime } from "../helpers/dateFormatter.js";
 
 export const addProduct = async (req, res) => {
@@ -1024,6 +1024,28 @@ export const getRelatedProducts = async (req, res) => {
       [category.toLowerCase(), prodId]
     );
     return res.json(prodDetails.rows).status(200);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+// once the bidding of the product is over, and "queue => bullmq" actions begin for updating the final details of the product
+export const updateFinalProductDetails = async (req, res) => {
+  const { prodId } = req.body;
+  let finalPrice = await redisClient.get(`roomId=${prodId}`);
+  if (!finalPrice) {
+    await auctionPool.query(
+      "INSERT INTO PRODUCT_FINAL_DETAILS (PRODUCT_ID) VALUES ($1)",
+      [prodId]
+    );
+    return res.status(201).json({ message: "final details added." });
+  }
+  try {
+    await auctionPool.query(
+      "INSERT INTO PRODUCT_FINAL_DETAILS (PRODUCT_ID,SOLD_PRICE) VALUES ($1,$2)",
+      [prodId, JSON.parse(finalPrice).maxPrice]
+    );
+    return res.status(201).json({ message: "final details added." });
   } catch (error) {
     console.log(error);
   }
