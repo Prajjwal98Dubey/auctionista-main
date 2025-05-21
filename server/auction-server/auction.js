@@ -33,6 +33,9 @@ io.on("connection", (socket) => {
       });
     }
   });
+  socket.on("auction_over_update", ({ auctionStatus }) => {
+    io.to(socket.roomId).emit("auction_status", { isAuctionOver: true });
+  });
   socket.on("new_bid", async ({ roomId, newPrice, originalPrice }) => {
     let isRoomPresent = await redisClient.get(`roomId=${roomId}`);
     if (isRoomPresent) {
@@ -54,6 +57,17 @@ io.on("connection", (socket) => {
         io.to(roomId).emit("update_price", { newPrice });
       }
     }
+  });
+
+  // called when the "back to home" btn clicked in the client  => think of a better solution !!!
+  socket.on("socket_disconnect", () => {
+    let roomId = socket.roomId;
+    socket.leave(roomId);
+    let clientCount = io.in(roomId).fetchSockets();
+    io.to(roomId).emit("online_users", {
+      userCount: clientCount.length,
+    });
+    socket.disconnect(true);
   });
 
   socket.on("disconnecting", async () => {

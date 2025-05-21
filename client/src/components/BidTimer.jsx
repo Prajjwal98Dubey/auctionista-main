@@ -1,3 +1,5 @@
+// used once the auction is live and some user clicks on the place bid button it takes 3 seconds to place the bid.
+
 import React, { useEffect, useRef } from "react";
 
 const BidTimer = ({ count, setCount, showTimer, setShowTimer }) => {
@@ -16,7 +18,7 @@ const BidTimer = ({ count, setCount, showTimer, setShowTimer }) => {
       setShowTimer(false);
       setCount(3);
     }
-}, [count, setShowTimer, setCount]);
+  }, [count, setShowTimer, setCount]);
   return (
     <>
       <div className="py-2 flex justify-center items-center">

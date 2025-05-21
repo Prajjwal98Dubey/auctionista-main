@@ -11,7 +11,7 @@ import {
   isAuctionStart,
 } from "../helpers/dateFormatter";
 import ProductFeatureTable from "./ProductFeatureTable";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import ReviseBid from "./ReviseBid";
 import { useDispatch, useSelector } from "react-redux";
 import { addToBidCollection } from "../redux/slices/bidStatusSlice";
@@ -403,16 +403,18 @@ const BottomSheet = ({ setShowSingleProduct, prodId }) => {
                 </button>
                 {(isAuctionStart(prodDetails.bid_start_time) ||
                   showLiveAuctionBtn) && (
-                  <button
-                    className={`w-full h-[45px] bg-green-700 font-semibold text-[16px] rounded-md cursor-pointer my-1 flex justify-center items-center hover:bg-green-600`}
-                  >
-                    <div className="flex justify-center items-center font-extrabold h-[45px] px-1 text-green-400 ">
-                      <div className="rounded-full w-[10px] h-[10px] bg-red-500 animate-pulse"></div>
-                    </div>
-                    <div className="flex justify-center items-center h-[45px] text-[15px]">
-                      Live Auction
-                    </div>
-                  </button>
+                  <Link to={`/auction/${prodDetails.product_id}`}>
+                    <button
+                      className={`w-full h-[45px] bg-green-700 font-semibold text-[16px] rounded-md cursor-pointer my-1 flex justify-center items-center hover:bg-green-600`}
+                    >
+                      <div className="flex justify-center items-center font-extrabold h-[45px] px-1 text-green-400 ">
+                        <div className="rounded-full w-[10px] h-[10px] bg-red-500 animate-pulse"></div>
+                      </div>
+                      <div className="flex justify-center items-center h-[45px] text-[15px]">
+                        Live Auction
+                      </div>
+                    </button>
+                  </Link>
                 )}
               </div>
               <div className="px-3">
