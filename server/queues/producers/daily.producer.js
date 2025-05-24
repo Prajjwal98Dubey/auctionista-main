@@ -10,7 +10,7 @@ const addDailyAuctionProductsToQueue = async () => {
   await dailyProducer.upsertJobScheduler(
     "daily-auction-products",
     {
-      pattern: "0 10 0 * * *", // everyday at 12:05 p.m
+      pattern: "0 15 23 * * *", // everyday at 23:15 p.m
     },
     {
       name: "fetch-daily-products",

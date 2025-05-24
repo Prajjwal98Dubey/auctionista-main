@@ -3,6 +3,7 @@ import auctionPool from "../db/connectDB.js";
 import { categoryToDBCategory } from "../helpers/mapping.js";
 import { connectRedisServer, redisClient } from "../redisClient.js";
 import { convertDateToUsageTime } from "../helpers/dateFormatter.js";
+import { triggerCacheClean } from "../queues/producers/newItem.producer.js";
 
 export const addProduct = async (req, res) => {
   const user = req.user;
@@ -47,6 +48,7 @@ export const addProduct = async (req, res) => {
         bid_time,
       ]
     );
+    await triggerCacheClean("product");
     return res
       .json({
         message: "product added",
@@ -1032,6 +1034,7 @@ export const getRelatedProducts = async (req, res) => {
 // once the bidding of the product is over, and "queue => bullmq" actions begin for updating the final details of the product
 export const updateFinalProductDetails = async (req, res) => {
   const { prodId } = req.body;
+  console.log("update the product price from redis", prodId);
   let finalPrice = await redisClient.get(`roomId=${prodId}`);
   if (!finalPrice) {
     await auctionPool.query(

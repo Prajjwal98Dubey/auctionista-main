@@ -59,7 +59,7 @@ io.on("connection", (socket) => {
     }
   });
 
-  // called when the "back to home" btn clicked in the client  => think of a better solution !!!
+  // called when the "back to home" button clicked in the client  => think of a better solution !!!
   socket.on("socket_disconnect", () => {
     let roomId = socket.roomId;
     socket.leave(roomId);

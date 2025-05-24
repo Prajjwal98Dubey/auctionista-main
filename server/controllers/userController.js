@@ -2,6 +2,7 @@ import auctionPool from "../db/connectDB.js";
 import { nanoid } from "nanoid";
 import bcrypt from "bcrypt";
 import { generateToken } from "../helpers/token.js";
+import { triggerCacheClean } from "../queues/producers/newItem.producer.js";
 
 export const registerUser = async (req, res) => {
   const {
@@ -60,6 +61,7 @@ export const registerUser = async (req, res) => {
       "",
     ]
   );
+  await triggerCacheClean("people");
   res.cookie("accessToken", refresh_token, {
     httpOnly: true,
     maxAge: 24 * 60 * 60 * 30 * 1000,
