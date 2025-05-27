@@ -8,6 +8,7 @@ import useUserDetails from "./custom-hooks/useUserDetails";
 const Home = lazy(() => import("./pages/Home"));
 const Auth = lazy(() => import("./pages/Auth"));
 const Auction = lazy(() => import("./pages/Auction"));
+const AddProduct = lazy(() => import("./pages/AddProduct"));
 
 function App() {
   useUserDetails();
@@ -69,6 +70,14 @@ const appRouter = createBrowserRouter([
     element: (
       <Suspense fallback={<Loader />}>
         <Auction />
+      </Suspense>
+    ),
+  },
+  {
+    path: "/add",
+    element: (
+      <Suspense fallback={<Loader />}>
+        <AddProduct />
       </Suspense>
     ),
   },

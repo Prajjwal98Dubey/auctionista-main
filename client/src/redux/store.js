@@ -4,6 +4,7 @@ import productReducer from "./slices/productSlice";
 import userInfoReducer from "./slices/userInfoSlice";
 import bidStatusReducer from "./slices/bidStatusSlice";
 import productInfoReducer from "./slices/productInfoSlice";
+import newProductReducer from "./slices/newProductSlice";
 const store = configureStore({
   reducer: {
     category: categoryReducer,
@@ -11,6 +12,7 @@ const store = configureStore({
     userInfo: userInfoReducer,
     bidStatus: bidStatusReducer,
     productInfo: productInfoReducer,
+    newProduct: newProductReducer,
   },
 });
 

@@ -29,6 +29,10 @@ const FILTER_OPTIONS = {
     mappedFunction: filterByLowToHighPrice,
     isParameters: false,
   },
+  removeFilter: {
+    mappedFunction: () => {},
+    isParameters: false,
+  },
 };
 
 const FILTERS = {
@@ -62,6 +66,9 @@ const ProductFilter = ({ setFilterOption }) => {
           </option>
         ))}
       </select>
+      <div className="flex justify-center items-center bg-red-500 hover:bg-red-600 cursor-pointer w-[90px] px-1 py-1 h-[30px] rounded-md mx-1">
+        <p className="text-white font-bold text-[13px]">remove filter</p>
+      </div>
     </div>
   );
 };

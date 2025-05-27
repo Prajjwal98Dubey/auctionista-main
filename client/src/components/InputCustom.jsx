@@ -1,16 +1,23 @@
-import { useContext } from "react";
-import { mapCategoriesToInput } from "../helpers/mapCategoryToOptions";
-import ProductContext from "../context/ProductContext";
+import { mapCategoriesToInput } from "../helpers/mapCategoryFunc.js";
+import { useDispatch, useSelector } from "react-redux";
+import { addNewProduct } from "../redux/slices/newProductSlice.js";
 
 const InputCustom = ({ feature }) => {
-  const { productDetails, setProductDetails } = useContext(ProductContext);
+  // const { productDetails, setProductDetails } = useContext(ProductContext);
+  const newProductSelector = useSelector((state) => state.newProduct);
+  const dispatch = useDispatch();
   if (mapCategoriesToInput[feature] === "text") {
     return (
       <>
         <input
           type="text"
           onChange={(e) => {
-            setProductDetails({ ...productDetails, [feature]: e.target.value });
+            dispatch(
+              addNewProduct({
+                ...newProductSelector.productDetails,
+                [feature]: e.target.value,
+              })
+            );
           }}
           className="peer w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 placeholder-transparent transition-all duration-200"
         />
@@ -25,7 +32,12 @@ const InputCustom = ({ feature }) => {
         <input
           type="number"
           onChange={(e) => {
-            setProductDetails({ ...productDetails, [feature]: e.target.value });
+            dispatch(
+              addNewProduct({
+                ...newProductSelector.productDetails,
+                [feature]: e.target.value,
+              })
+            );
           }}
           className="peer w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 placeholder-transparent transition-all duration-200"
         />
@@ -40,7 +52,12 @@ const InputCustom = ({ feature }) => {
         <input
           type="date"
           onChange={(e) => {
-            setProductDetails({ ...productDetails, [feature]: e.target.value });
+            dispatch(
+              addNewProduct({
+                ...newProductSelector.productDetails,
+                [feature]: e.target.value,
+              })
+            );
           }}
           className="peer w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 placeholder-transparent transition-all duration-200"
         />
@@ -55,7 +72,12 @@ const InputCustom = ({ feature }) => {
         <input
           type="datetime-local"
           onChange={(e) => {
-            setProductDetails({ ...productDetails, [feature]: e.target.value });
+            dispatch(
+              addNewProduct({
+                ...newProductSelector.productDetails,
+                [feature]: e.target.value,
+              })
+            );
           }}
           className="peer w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 placeholder-transparent transition-all duration-200"
         />
