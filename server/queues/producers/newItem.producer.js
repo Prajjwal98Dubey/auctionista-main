@@ -18,6 +18,7 @@ export const triggerCacheClean = async (type) => {
     {
       removeOnComplete: true,
       removeOnFail: true,
+      removeDependencyOnFailure: true,
     }
   );
 };

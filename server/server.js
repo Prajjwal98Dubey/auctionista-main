@@ -30,7 +30,6 @@ app.use("/api/v1/search", searchRouter);
 app.use("/api/v1/watchlist", watchListRouter);
 
 /* BIDS */
-
 app.use("/api/v1/bid", bidRouter);
 
 app.listen(process.env.PORT || 5001, async () => {

@@ -15,7 +15,7 @@ const mapElasticSearchQueryStringToType = {
 const cacheCleaningWorker = new Worker(
   "cache-cleaner",
   async (job) => {
-    // TODO: 1. clean the search cache 2. delete tbe elastic search query 3. sync new items in elastic search
+    // TODO: 1. clean the search cache 2. delete tbe elastic search query 3.sync new items in elastic search
     try {
       await cacheCleanByPattern("search:*");
       await fetch(

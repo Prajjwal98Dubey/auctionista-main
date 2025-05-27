@@ -2,5 +2,5 @@
 .env
 connectDb.js
 /bid-logs
-/search
 t_auction.js
+syncElasticPostgresql.js

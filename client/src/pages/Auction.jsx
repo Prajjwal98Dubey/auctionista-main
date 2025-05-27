@@ -11,8 +11,6 @@ import AuctionTimer from "../components/AuctionTimer";
 const DEFAULT_USER_IMG =
   "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQR1mUIvhtD-xNTuX2-AQczIi6RtMlIDbwUPNOVhmg-ZCZ6y2mwi59Xs4qS_J5JFlrM-J0&usqp=CAU";
 
-const AUCTION_STATUS = {};
-
 const Auction = () => {
   const socketRef = useRef(null);
   const location = useLocation();
@@ -30,7 +28,8 @@ const Auction = () => {
     if (
       !socketRef.current &&
       Object.keys(userDetails).length &&
-      Object.keys(prodDetails).length
+      Object.keys(prodDetails).length &&
+      auctionDateTag(prodDetails.bid_start_time).tag.toLowerCase() === "ongoing"
     ) {
       socketRef.current = io("ws://localhost:5002");
       socketRef.current.emit("join-room", {
@@ -105,7 +104,9 @@ const Auction = () => {
             <div
               className="fixed top-4 left-4"
               onClick={() => {
-                socketRef.current.emit("socket_disconnect");
+                if (socketRef.current) {
+                  socketRef.current.emit("socket_disconnect");
+                }
               }}
             >
               <BackNavigate />

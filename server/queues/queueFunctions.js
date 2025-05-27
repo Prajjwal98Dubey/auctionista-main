@@ -1,3 +1,4 @@
+// functions used in job processing.
 import auctionPool from "../db/connectDB.js";
 import { categoryToDBCategory } from "../helpers/mapping.js";
 import { connectRedisServer, redisClient } from "../redisClient.js";
@@ -49,4 +50,24 @@ export const updateHighestBidSpecificProductByQueue = async (
   } catch (err) {
     console.log(err);
   }
+};
+
+export const cacheCleanByPattern = async (pattern) => {
+  await connectRedisServer();
+  let cursor = 0;
+  let deletedCount = 0;
+  do {
+    const reply = await redisClient.scan(cursor, {
+      MATCH: pattern,
+      COUNT: 100,
+    });
+
+    cursor = reply.cursor;
+    const keys = reply.keys;
+
+    if (keys.length > 0) {
+      const deleted = await redisClient.del(keys);
+      deletedCount += deleted;
+    }
+  } while (cursor !== 0);
 };
