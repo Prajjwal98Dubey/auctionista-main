@@ -8,6 +8,7 @@ import {
   addMobile,
   addMonitor,
   addMouse,
+  addPainting,
   addProduct,
   addWatch,
   deleteProduct,
@@ -39,6 +40,8 @@ productRouter
   .route("/add_general_electronics")
   .post(authMiddleWare, addGeneralElectronics);
 productRouter.route("/add_headphone").post(authMiddleWare, addHeadPhone);
+productRouter.route("/add_painting").post(authMiddleWare, addPainting);
+
 productRouter.route("/all_products").get(displayProducts);
 productRouter.route("/prod_details").get(getProductDetails);
 productRouter.route("/my_product_details").get(authMiddleWare, getMyProducts);

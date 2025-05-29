@@ -7,4 +7,5 @@ export const categoryToDBCategory = {
   watch: "WATCH_SPEC",
   headphone: "HEADPHONE_SPEC",
   "general-electronics": "GENERAL_ELECTRONICS_SPEC",
+  painting: "PAINTING",
 };

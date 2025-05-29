@@ -48,7 +48,6 @@ export const addProduct = async (req, res) => {
         bid_time,
       ]
     );
-    await triggerCacheClean("product");
     return res
       .json({
         message: "product added",
@@ -193,6 +192,7 @@ export const addMobile = async (req, res) => {
         cpu,
       ]
     );
+    await triggerCacheClean("product");
     return res.json({ message: "product added!!!" }).status(201);
   } catch (error) {
     console.log(error);
@@ -285,6 +285,7 @@ export const addLaptop = async (req, res) => {
         cpu,
       ]
     );
+    await triggerCacheClean("product");
     return res.json({ message: "product added!!!" }).status(201);
   } catch (error) {
     console.log(error);
@@ -369,7 +370,7 @@ export const addWatch = async (req, res) => {
         bid_time,
       ]
     );
-
+    await triggerCacheClean("product");
     return res.json({ message: "product added!!!" }).status(201);
   } catch (error) {
     return res.json({ message: "error" }).status(400);
@@ -449,6 +450,7 @@ export const addMonitor = async (req, res) => {
         product_images,
       ]
     );
+    await triggerCacheClean("product");
     return res.json({ message: "product added!!" }).status(201);
   } catch (error) {
     return res.json({ message: "error" }).status(400);
@@ -526,6 +528,7 @@ export const addKeyBoard = async (req, res) => {
         product_images,
       ]
     );
+    await triggerCacheClean("product");
     return res.json({ mesage: "product added!!!" }).status(201);
   } catch (error) {
     console.log(error);
@@ -606,6 +609,7 @@ export const addHeadPhone = async (req, res) => {
         product_images,
       ]
     );
+    await triggerCacheClean("product");
     return res.json({ mesage: "product added!!!" }).status(201);
   } catch (error) {
     return res.json({ message: "error" }).status(400);
@@ -685,6 +689,7 @@ export const addMouse = async (req, res) => {
         product_images,
       ]
     );
+    await triggerCacheClean("product");
     return res.json({ mesage: "product added!!!" }).status(201);
   } catch (error) {
     console.log(error);
@@ -763,9 +768,91 @@ export const addGeneralElectronics = async (req, res) => {
         product_images,
       ]
     );
+    await triggerCacheClean("product");
     return res.json({ mesage: "product added!!!" }).status(201);
   } catch (error) {
     return res.json({ message: "error" }).status(400);
+  }
+};
+export const addPainting = async (req, res) => {
+  const {
+    set_price,
+    original_price,
+    title,
+    desc,
+    usage_time,
+    bid_start_time,
+    product_appeal,
+    product_images,
+    painter_name,
+    time_of_creation,
+    medium,
+    height,
+    width,
+    are_you_painter,
+    want_first_buyer,
+  } = req.body;
+  const attributes = [
+    set_price,
+    original_price,
+    title,
+    desc,
+    usage_time,
+    bid_start_time,
+    product_appeal,
+    product_images,
+    painter_name,
+    time_of_creation,
+    medium,
+    height,
+    width,
+    are_you_painter,
+    want_first_buyer,
+  ];
+  const userId = req.user;
+  try {
+    for (let attr of attributes) {
+      if (attr == undefined || attr == null || attr == "")
+        return res.json({ message: "insufficient data" }).status(400);
+    }
+    let productId = nanoid();
+    await auctionPool.query(
+      "INSERT INTO PRODUCT VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12)",
+      [
+        productId,
+        userId,
+        set_price,
+        original_price,
+        title,
+        desc,
+        "painting",
+        usage_time,
+        bid_start_time,
+        0,
+        product_appeal,
+        product_images,
+      ]
+    );
+    await auctionPool.query(
+      "INSERT INTO PAINTING VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)",
+      [
+        productId,
+        painter_name,
+        "painting",
+        time_of_creation,
+        medium,
+        height,
+        width,
+        product_images,
+        are_you_painter.toLowerCase() == "yes" ? true : false,
+        want_first_buyer.toLowerCase() == "yes" ? true : false,
+        userId,
+      ]
+    );
+    await triggerCacheClean("product");
+    return res.status(201).json({ message: "product added !!!" });
+  } catch (err) {
+    console.log(err);
   }
 };
 
@@ -804,7 +891,8 @@ export const getProductDetails = async (req, res) => {
       `SELECT * FROM ${categoryToDBCategory[category]} WHERE PRODUCT_ID = $1`,
       [prodId]
     );
-    if (results.rows.length === 0) return res.json;
+    if (results.rows.length === 0)
+      return res.json({ message: "no product exists." });
     let userDetails = await auctionPool.query(
       "SELECT USER_NAME,USER_PHOTO FROM USERS WHERE USER_ID = $1",
       [results.rows[0].user_id]
@@ -912,6 +1000,21 @@ export const getProductDetails = async (req, res) => {
             },
           })
           .status(200);
+      case "painting":
+        return res.json({
+          details: {
+            ...commonAttr,
+            painter_name: results.rows[0].painter_name,
+            time_of_creation: new Date(
+              results.rows[0].time_of_creation
+            ).getFullYear(),
+            medium: results.rows[0].medium,
+            height: results.rows[0].height,
+            width: results.rows[0].width,
+            are_you_painter: results.rows[0].is_painter_auctioning,
+            want_first_buyer: results.rows[0].look_for_first_buyer,
+          },
+        });
       case "general-electronics":
         return res
           .json({

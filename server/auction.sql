@@ -161,3 +161,18 @@ product_color varchar(50),
 product_spec_desc text,
 is_wireless boolean
 )
+
+create table painting_spec(
+product_id varchar(255) primary key,
+foreign key (product_id) REFERENCES product(product_id) ON DELETE CASCADE,
+painter_name varchar(255),
+category varchar(15) default 'Painting',
+time_of_creation varchar(255),
+medium varchar(255),
+height integer,
+width integer,
+product_images text[],
+created_at timestamp,
+look_for_first_buyer boolean,
+is_painter_auctioning boolean,
+)

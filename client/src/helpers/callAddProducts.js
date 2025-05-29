@@ -7,6 +7,7 @@ import {
   PRODUCT_KEYBOARD_ADD,
   PRODUCT_MONITOR_ADD,
   PRODUCT_MOUSE_ADD,
+  PRODUCT_PAINTING_ADD,
 } from "./backendApi";
 
 export const callAddProducts = async (category, details, images) => {
@@ -382,6 +383,45 @@ export const callAddProducts = async (category, details, images) => {
         }),
       })
         .then(() => alert("product added"))
+        .catch((e) => console.log(e));
+    } catch (error) {
+      console.log(error);
+    }
+  } else if (category === "painting") {
+    for (let key of Object.keys(details)) {
+      if (
+        details[key] == undefined ||
+        details[key] == null ||
+        details[key] == ""
+      )
+        return alert("enter all mandatory fields.");
+    }
+    try {
+      await fetch(PRODUCT_PAINTING_ADD, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({
+          product_images: images,
+          set_price: parseInt(details.set_price),
+          original_price: parseInt(details.original_price),
+          title: details.title,
+          desc: details.desc,
+          usage_time: details.usage_time,
+          bid_start_time: details.bid_start_time,
+          product_appeal: details.product_appeal,
+          painter_name: details.painter_name,
+          time_of_creation: details.time_of_creation,
+          medium: details.medium,
+          height: details.height,
+          width: details.width,
+          are_you_painter: details.are_you_painter,
+          want_first_buyer: details.want_first_buyer,
+        }),
+      })
+        .then(() => alert("product added!!!"))
         .catch((e) => console.log(e));
     } catch (error) {
       console.log(error);

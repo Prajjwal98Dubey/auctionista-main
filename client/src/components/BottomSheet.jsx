@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { CrossIcon, HeartOutlineIcon, HeartSolidIcon } from "../icons/Icons";
 import {
   ADD_NEW_BID,
@@ -37,6 +37,7 @@ const BottomSheet = ({ setShowSingleProduct, prodId }) => {
   const navigate = useNavigate();
   const bidSelector = useSelector((state) => state.bidStatus.appliedBids);
   const productInfoSelector = useSelector((state) => state.productInfo);
+  const timerRef = useRef(null);
 
   const dispatch = useDispatch();
   const handlePlaceBid = async () => {
@@ -105,7 +106,7 @@ const BottomSheet = ({ setShowSingleProduct, prodId }) => {
       setIsLoading(false);
       if (auctionDateTag(res.bid_start_time).tag === "Scheduled") {
         let timeDiff = new Date(res.bid_start_time).getTime() - Date.now();
-        setTimeout(() => {
+        timerRef.current = setTimeout(() => {
           setShowLiveAuctionBtn(true);
         }, timeDiff);
       }
@@ -179,6 +180,7 @@ const BottomSheet = ({ setShowSingleProduct, prodId }) => {
     } else getBidStatus();
     return () => {
       window.onscroll = null;
+      clearTimeout(timerRef.current);
     };
   }, [prodId, location, dispatch, productInfoSelector]);
   return (
@@ -227,7 +229,6 @@ const BottomSheet = ({ setShowSingleProduct, prodId }) => {
                     Number of bids:{" "}
                   </div>
                   <div className="text-[14px] text-white px-1">
-                    {/* {bidStatus.bidCount} */}
                     {productInfoSelector.productBidInfo[
                       location.pathname
                         .split("/")
@@ -317,9 +318,18 @@ const BottomSheet = ({ setShowSingleProduct, prodId }) => {
             </div>
             {/* right side */}
             <div className="w-1/2 px-2 py-1">
-              <div className="flex justify-start font-semibold text-[15px]">
-                {prodDetails.product_desc}
-              </div>
+              {prodDetails.product_desc && (
+                <div className="flex justify-start font-semibold text-[15px]">
+                  <div>
+                    <div className="text-[13px] text-gray-300 font-semibold">
+                      Description
+                    </div>
+                    <div className="text-[16px]">
+                      {prodDetails.product_desc}
+                    </div>
+                  </div>
+                </div>
+              )}
               <div className="flex py-2 justify-around">
                 <div>
                   <div className="text-gray-300 flex justify-center text-[15px]">
@@ -417,6 +427,7 @@ const BottomSheet = ({ setShowSingleProduct, prodId }) => {
                   </Link>
                 )}
               </div>
+
               <div className="px-3">
                 <ProductFeatureTable
                   prodId={

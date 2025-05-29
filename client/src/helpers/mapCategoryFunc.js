@@ -26,6 +26,15 @@ export const mapCategoriesToOptions = {
   mouse: ["is_wireless"],
   headphone: ["is_wireless"],
   electronics: [],
+  painting: [
+    "painter_name",
+    "time_of_creation",
+    "medium",
+    "height",
+    "width",
+    "are_you_painter",
+    "want_first_buyer",
+  ],
   common: [
     "brand_name",
     "model_name",
@@ -65,6 +74,13 @@ export const mapCategoriesToInput = {
   is_calling_available: "number",
   have_fitness_tracker: "number",
   is_wireless: "text",
+  painter_name: "text",
+  time_of_creation: "time",
+  medium: "text",
+  height: "number",
+  width: "number",
+  are_you_painter: "text",
+  want_first_buyer: "text",
 };
 
 export const attributesToComponent = {
@@ -125,6 +141,7 @@ export const mapProductCategory = [
   "sivler",
   "platinum",
   "diamond",
+  "others",
 ];
 
 export const mapCategoriesToComponent = {
@@ -203,5 +220,14 @@ export const mapCategoriesToComponent = {
     is_digital: "Digital",
     is_calling_available: "Calling",
     have_fitness_tracker: "Fitness Tracker",
+  },
+  painting: {
+    painter_name: "Painter Name",
+    time_of_creation: "Year of creation",
+    medium: "Medium",
+    height: "Height",
+    width: "Width",
+    are_you_painter: "Are you Painter",
+    want_first_buyer: "Want first buyer",
   },
 };

@@ -5,6 +5,17 @@ import { callAddProducts } from "../helpers/callAddProducts";
 import { addProductImages } from "../firebase/firebase.storage.js";
 import { useSelector } from "react-redux";
 
+const paintingCommAttributes = [
+  "title",
+  "desc",
+  "original_price",
+  "set_price",
+  "usage_time",
+  "bid_start_time",
+  "product_appeal",
+  "bid_time",
+];
+
 const AddProduct = () => {
   const [selected, setSelected] = useState("");
   const [images, setImages] = useState([]);
@@ -64,6 +75,8 @@ const AddProduct = () => {
               <option value="no-select" disabled>
                 Choose a Category
               </option>
+              <option value="painting">Painting</option>
+              <option value="rear">A Rear Find</option>
               <option value="mobile">Mobile</option>
               <option value="laptop">Laptop</option>
               <option value="watch">Watch</option>
@@ -72,6 +85,7 @@ const AddProduct = () => {
               <option value="mouse">Mouse</option>
               <option value="headphone">Headphone</option>
               <option value="electronics">General Electronics</option>
+              <option value="others">Others</option>
             </select>
           </div>
 
@@ -152,14 +166,23 @@ const AddProduct = () => {
           </div>
           {selected && (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {[
-                ...mapCategoriesToOptions["common"],
-                ...mapCategoriesToOptions[selected],
-              ].map((feature, index) => (
-                <div key={index} className="relative">
-                  <InputCustom feature={feature} />
-                </div>
-              ))}
+              {selected.toLowerCase() != "painting"
+                ? [
+                    ...mapCategoriesToOptions["common"],
+                    ...mapCategoriesToOptions[selected],
+                  ].map((feature, index) => (
+                    <div key={index} className="relative">
+                      <InputCustom feature={feature} />
+                    </div>
+                  ))
+                : [
+                    ...paintingCommAttributes,
+                    ...mapCategoriesToOptions[selected],
+                  ].map((feature, index) => (
+                    <div key={index} className="relative">
+                      <InputCustom feature={feature} />
+                    </div>
+                  ))}
             </div>
           )}
 
