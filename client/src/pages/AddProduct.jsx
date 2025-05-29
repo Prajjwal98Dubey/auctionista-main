@@ -20,13 +20,18 @@ const AddProduct = () => {
   const [selected, setSelected] = useState("");
   const [images, setImages] = useState([]);
   const newProductSelector = useSelector((state) => state.newProduct);
+  const [uploadedImages, setUploadedImages] = useState([]);
   const handleAddProduct = async () => {
     try {
-      let uploadedImages = await addProductImages(images);
+      let tmp = [];
+      if (uploadedImages.length == 0) {
+        tmp = await addProductImages(images);
+        setUploadedImages(tmp);
+      }
       await callAddProducts(
         selected,
         newProductSelector.productDetails,
-        uploadedImages
+        tmp.length ? tmp : uploadedImages
       );
     } catch (e) {
       console.log(e);

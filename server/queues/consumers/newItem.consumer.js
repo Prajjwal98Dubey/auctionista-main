@@ -17,7 +17,9 @@ const cacheCleaningWorker = new Worker(
   async (job) => {
     // TODO: 1. clean the search cache 2. delete tbe elastic search query 3.sync new items in elastic search
     try {
-      await cacheCleanByPattern("search:*");
+      await cacheCleanByPattern(
+        job.data.type == "people" ? "search:user:*" : "search:product:*"
+      );
       await fetch(
         `http://localhost:9200/${
           mapElasticSearchQueryStringToType[job.data.type]

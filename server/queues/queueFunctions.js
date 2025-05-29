@@ -53,7 +53,9 @@ export const updateHighestBidSpecificProductByQueue = async (
 };
 
 export const cacheCleanByPattern = async (pattern) => {
-  await connectRedisServer();
+  if (!redisClient.isOpen) {
+    await connectRedisServer();
+  }
   let cursor = 0;
   let deletedCount = 0;
   do {
