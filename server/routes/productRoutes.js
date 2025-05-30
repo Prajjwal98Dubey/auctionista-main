@@ -18,6 +18,7 @@ import {
   getMyProducts,
   getProductDetails,
   getRelatedProducts,
+  myListingDetails,
   singleProductDetails,
   updateFinalProductDetails,
   updateHighestBidOfProduct,
@@ -57,4 +58,7 @@ productRouter
 
 productRouter.route("/related_products").get(getRelatedProducts);
 productRouter.route("/final_product_details").post(updateFinalProductDetails);
+productRouter
+  .route("/my_listing_details")
+  .get(authMiddleWare, myListingDetails);
 export default productRouter;

@@ -12,7 +12,7 @@ watchListRouter
   .route("/add_products")
   .post(authMiddleWare, addProductsToWatchList);
 watchListRouter
-  .route("/remove_product")  
+  .route("/remove_product")
   .delete(authMiddleWare, removeProductsFromWatchList);
 watchListRouter
   .route("/watchlist_products")

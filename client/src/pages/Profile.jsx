@@ -9,7 +9,6 @@ import {
   LocationLogoIcon,
   WalletLogoIcon,
 } from "../icons/Icons";
-import ActiveAuction from "../components/ActiveAuction";
 import WonAuction from "../components/WonAuction";
 import WatchList from "../components/WatchList";
 import Reviews from "../components/Reviews";
@@ -17,6 +16,7 @@ import { LOGOUT_USER_API } from "../helpers/backendApi";
 import { allLocalStorageKeys } from "../helpers/localStorageFunctions";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
+import MyListings from "../components/MyListings";
 
 const DEFAULT_USER_IMG =
   "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQR1mUIvhtD-xNTuX2-AQczIi6RtMlIDbwUPNOVhmg-ZCZ6y2mwi59Xs4qS_J5JFlrM-J0&usqp=CAU";
@@ -24,8 +24,8 @@ const DEFAULT_USER_IMG =
 const tags = [
   {
     id: 0,
-    name: "Active Auctions",
-    comp: <ActiveAuction />,
+    name: "Listings",
+    comp: <MyListings />,
   },
   {
     id: 1,
@@ -63,7 +63,6 @@ const Profile = () => {
   return (
     <>
       <Navbar />
-      {console.log("user details", userInfo.userDetails)}
       <div className="hidden lg:flex font-kanit ">
         <div className="w-full min-h-screen px-3 py-2">
           <div className="w-full h-fit border border-gray-300 rounded-md flex justify-between">

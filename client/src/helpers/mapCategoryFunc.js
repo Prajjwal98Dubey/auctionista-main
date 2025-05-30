@@ -195,7 +195,7 @@ export const mapCategoriesToComponent = {
     product_appeal: "Appeal",
     is_wireless: "Wireless",
   },
-  headphones: {
+  headphone: {
     brand_name: "Brand",
     model_name: "Model",
     product_color: "Color",

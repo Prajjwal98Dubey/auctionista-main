@@ -883,7 +883,6 @@ export const displayProducts = async (req, res) => {
 
 export const getProductDetails = async (req, res) => {
   const { prodId, category } = req.query;
-
   try {
     if (categoryToDBCategory[category] === undefined)
       return res.json({ message: "category does not exists." }).status(400);
@@ -1055,7 +1054,7 @@ export const getMyProducts = async (req, res) => {
   const user = req.user;
   try {
     let productDetails = await auctionPool.query(
-      "SELECT PRODUCT_TITLE,PRODUCT_SET_PRICE,PRODUCT_USAGE_TIME,PRODUCT_IMAGES,PRODUCT_CATEGORY,PRODUCT_ID FROM PRODUCT WHERE PRODUCT_USER_ID = $1",
+      "SELECT * FROM PRODUCT WHERE PRODUCT_USER_ID = $1",
       [user]
     );
     return res.json({ products: productDetails.rows });
@@ -1154,5 +1153,20 @@ export const updateFinalProductDetails = async (req, res) => {
     return res.status(201).json({ message: "final details added." });
   } catch (error) {
     console.log(error);
+  }
+};
+
+export const myListingDetails = async (req, res) => {
+  const { prodId } = req.query;
+  try {
+    let userInterested = await auctionPool.query(
+      "SELECT COUNT(*) AS COUNT FROM BID_STATUS BID FULL OUTER JOIN USER_WATCHLIST WATCH ON BID.PRODUCT_ID = WATCH.PRODUCT_ID WHERE BID.PRODUCT_ID=$1 OR WATCH.PRODUCT_ID = $1",
+      [prodId]
+    );
+    return res
+      .status(200)
+      .json({ userInterested: userInterested.rows[0].count });
+  } catch (err) {
+    console.log(err);
   }
 };

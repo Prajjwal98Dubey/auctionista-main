@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import {
   BATCH_WATCHLIST_PRODUCTS_API,
+  REMOVE_PRODUCTS_FROM_WATCHLIST_API,
   SINGLE_PRODUCTS_API,
 } from "../helpers/backendApi";
 import { HeartSolidIcon, WatchLogoIcon } from "../icons/Icons";
@@ -30,11 +31,18 @@ const WatchList = () => {
     }
   }, []);
 
-  const handleRemoveFromWatchList = (id) => {
+  const handleRemoveFromWatchList = async (id) => {
     setWatchListDetails([
       ...watchListDetails.filter((item) => item.product_id !== id),
     ]);
     removeFromWatchList(id);
+    await fetch(REMOVE_PRODUCTS_FROM_WATCHLIST_API + `?prodId=${id}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+    });
   };
 
   return (

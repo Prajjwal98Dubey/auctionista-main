@@ -189,7 +189,7 @@ const BottomSheet = ({ setShowSingleProduct, prodId }) => {
         className="absolute right-4 top-2 bg-gray-300 p-2 rounded-full hover:bg-gray-400 cursor-pointer transition duration-200"
         onClick={() => {
           if (location.pathname.split("/").some((chr) => chr === "product"))
-            navigate("/");
+            navigate(-1);
           else setShowSingleProduct(false);
         }}
       >
