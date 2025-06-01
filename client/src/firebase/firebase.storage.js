@@ -18,3 +18,17 @@ export const addProductImages = async (images) => {
   alert("images uploaded.");
   return uploadedImagesCollection;
 };
+
+export const addUserImage = async (file) => {
+  const imageRef = ref(
+    storage,
+    `auction/users/${file.name.split(".")[0] + "-" + Date.now()}`
+  );
+  try {
+    await uploadBytes(imageRef, file);
+    let url = await getDownloadURL(imageRef);
+    return url;
+  } catch (error) {
+    console.log(error);
+  }
+};

@@ -230,35 +230,29 @@ export const getUserDetails = async (req, res) => {
 };
 
 export const editUser = async (req, res) => {
-  const user = req.user;
-  /*
-    
-   if 'UserName' is to be changed then check if the new username does not exists check for contact no for same.
-   
-    */
-
-  const {
-    user_first_name,
-    user_last_name,
-    user_contact_no,
-    user_address_line_1,
-    user_city,
-    user_photo,
-  } = req.body;
+  const userId = req.user;
+  const reqBody = req.body;
   try {
-    await auctionPool.query(
-      "UPDATE USERS SET user_first_name = $1,user_last_name = $2,user_contact_no = $3,user_address_line_1 = $4,user_city = $5,user_photo = $6 WHERE USER_ID = $7",
-      [
-        user_first_name,
-        user_last_name,
-        user_contact_no,
-        user_address_line_1,
-        user_city,
-        user_photo,
-        user,
-      ]
-    );
-    return res.json({ message: "user updated" }).status(200);
+    let fields = Object.keys(reqBody);
+    if (fields.length == 0)
+      return res.json({ message: "no column to update !!!" });
+    let values = [];
+    let i = 0;
+    let setCollection = [];
+    while (i < fields.length) {
+      setCollection.push(`${fields[i]} = $${i + 1}`);
+      values.push(reqBody[fields[i]]);
+      i += 1;
+    }
+    i += 1;
+    values.push(userId);
+    const query = `
+      UPDATE USERS
+      SET ${setCollection.join(", ")} 
+      WHERE USER_ID = $${i} 
+    `;
+    await auctionPool.query(query, values);
+    return res.json({ message: "user updated success !!!" });
   } catch (error) {
     console.log(error);
   }
